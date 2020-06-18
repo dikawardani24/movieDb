@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import dika.wardani.R
 import dika.wardani.databinding.ItemMovieBinding
 import dika.wardani.domain.Movie
 import dika.wardani.util.DateFormatterHelper
@@ -44,6 +45,10 @@ class MovieItemAdapter(
         fun bind(movie: Movie) {
             binding.run {
                 Picasso.get().load(movie.movieImage?.posterPath)
+                    .fit()
+                    .centerCrop()
+                    .noFade()
+                    .placeholder(R.drawable.progress_animation)
                     .into(movieImg)
 
                 movieTitle.text = movie.title

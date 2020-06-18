@@ -6,18 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import dika.wardani.local.converter.DateConverter
-import dika.wardani.local.dao.FavouriteDao
-import dika.wardani.local.entity.FavouriteEntity
+import dika.wardani.local.dao.FavouriteMovieDao
+import dika.wardani.local.entity.FavouriteMovieEntity
 
 @Database(
     version = 1, entities = [
-        FavouriteEntity::class
+        FavouriteMovieEntity::class
     ]
 )
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase: RoomDatabase() {
 
-    abstract val favouriteDao: FavouriteDao
+    abstract val favouriteMovieDao: FavouriteMovieDao
 
     companion object {
         @Volatile

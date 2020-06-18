@@ -66,11 +66,6 @@ class MovieListActivity : AppCompatActivity(), MovieItemAdapter.OnSelectedMovieL
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadMovies()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
@@ -86,6 +81,8 @@ class MovieListActivity : AppCompatActivity(), MovieItemAdapter.OnSelectedMovieL
         moviesRv.layoutManager = LinearLayoutManager(this)
 
         filterBtn.setOnClickListener { showFilterDialog() }
+
+        loadMovies()
     }
 
     override fun onSelected(movie: Movie) {

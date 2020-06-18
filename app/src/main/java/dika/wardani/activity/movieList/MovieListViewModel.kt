@@ -23,21 +23,17 @@ class MovieListViewModel(
         currentPage = 1
     }
 
-    fun stop() {
-        currentProcess?.dispose()
-    }
-
     fun getMovies(): LiveData<Result<List<Movie>>> {
         val liveData = MutableLiveData<Result<List<Movie>>>()
 
         Log.d(TAG, "page: $currentPage, filter: $currentFilterType")
-
         val single = when(currentFilterType) {
             FilterType.TOP_RATED -> movieRepository.getTopRatedMovies(currentPage)
             FilterType.NOW_PLAYING -> movieRepository.getNowPlayingMovies(currentPage)
             FilterType.POPULAR -> movieRepository.getPopularMovies(currentPage)
         }
 
+        currentProcess?.dispose()
         currentProcess = single.subscribeOn(Schedulers.io())
             .doAfterSuccess {
                 when(it) {

@@ -23,29 +23,49 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/movieImg"
                     android:layout_width="100dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="150dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_local_movies_black_24dp"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
 
-                    <TextView
-                        android:id="@+id/movieTitle"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Movie Title"
-                        style="@style/TextAppearance.AppCompat.Headline"
-                        tools:ignore="HardcodedText" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/movieTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Movie Title"
+                            style="@style/TextAppearance.AppCompat.Headline"
+                            tools:ignore="HardcodedText" />
+
+                        <ImageButton
+                            android:id="@+id/favouriteBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_favorite_border_black_24dp"
+                            android:tint="@android:color/darker_gray"
+                            android:background="@android:color/transparent"
+                            tools:ignore="ContentDescription" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/movieReleaseDate"
@@ -56,8 +76,6 @@
 
                     <TextView
                         android:id="@+id/movieOverview"
-                        android:ellipsize="end"
-                        android:maxLines="5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/lorem_ipsum"
@@ -65,6 +83,33 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Review"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:ignore="HardcodedText" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviewsRv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
