@@ -5,6 +5,7 @@ import dika.wardani.api.MovieEndPoint
 import dika.wardani.api.mapper.MovieMapper
 import dika.wardani.domain.Movie
 import dika.wardani.domain.Page
+import dika.wardani.exception.NotMoreDataException
 import dika.wardani.exception.SystemException
 import dika.wardani.repository.BaseRepository
 import dika.wardani.util.Result
@@ -25,7 +26,7 @@ class MovieRepositoryImpl(
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
             } else {
-                Result.Failed<Page<Movie>>(SystemException("No more data"))
+                Result.Failed<Page<Movie>>(NotMoreDataException("No more data"))
             }
         }.onErrorReturn {
             Result.Failed(handle(it))
@@ -43,7 +44,7 @@ class MovieRepositoryImpl(
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
             } else {
-                Result.Failed<Page<Movie>>(SystemException("No more data"))
+                Result.Failed<Page<Movie>>(NotMoreDataException("No more data"))
             }
         }.onErrorReturn {
             Result.Failed(handle(it))
@@ -61,7 +62,7 @@ class MovieRepositoryImpl(
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
             } else {
-                Result.Failed<Page<Movie>>(SystemException("No more data"))
+                Result.Failed<Page<Movie>>(NotMoreDataException("No more data"))
             }
         }.onErrorReturn {
             Result.Failed(handle(it))
