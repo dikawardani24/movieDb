@@ -1,6 +1,6 @@
 package dika.wardani.domain
 
 data class Page<T>(
-    var page: Number,
+    var number: Int,
     var datas: List<T>
 )

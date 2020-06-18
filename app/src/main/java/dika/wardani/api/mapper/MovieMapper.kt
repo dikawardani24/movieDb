@@ -10,6 +10,7 @@ import dika.wardani.domain.Collection
 import dika.wardani.util.DateFormatterHelper
 
 object MovieMapper {
+    const val imageBaseUrl = "https://image.tmdb.org/t/p/w500"
 
     private fun toMovie(movieItem: MovieItem): Movie {
         val genres = ArrayList<Genre>()
@@ -21,7 +22,10 @@ object MovieMapper {
         }
 
         val image = if (movieItem.backDropPath == null && movieItem.posterPath == null)
-            null else MovieImage(backDropPath = movieItem.backDropPath, posterPath = movieItem.posterPath)
+            null else MovieImage(
+            backDropPath = "$imageBaseUrl${movieItem.backDropPath}",
+            posterPath = "$imageBaseUrl${movieItem.posterPath}"
+        )
 
 
         val vote = Vote(
@@ -70,21 +74,21 @@ object MovieMapper {
     fun toMoviePage(topRatedMovieResponse: TopRatedMovieResponse): Page<Movie> {
 
         return  Page(
-            page = topRatedMovieResponse.page,
+            number = topRatedMovieResponse.page,
             datas = toMovieList(topRatedMovieResponse.result)
         )
     }
 
     fun toMoviePage(nowPlayingMovieResponse: NowPlayingMovieResponse): Page<Movie> {
         return Page(
-            page = 0,
+            number = 0,
             datas = toMovieList(nowPlayingMovieResponse.result)
         )
     }
 
     fun toMoviePage(popularMovieResponse: PopularMovieResponse): Page<Movie> {
         return Page(
-            page = popularMovieResponse.page,
+            number = popularMovieResponse.page,
             datas = toMovieList(popularMovieResponse.result)
         )
     }
@@ -98,8 +102,11 @@ object MovieMapper {
         }
 
         val image = if (movieItem.backdropPath == null && movieItem.posterPath == null)
-            null else MovieImage(backDropPath = movieItem.backdropPath, posterPath = movieItem.posterPath)
-
+            null else MovieImage(
+            backDropPath = "$imageBaseUrl${movieItem.backdropPath}",
+            posterPath = "$imageBaseUrl${movieItem.posterPath}"
+        )
+        
         val vote = Vote(
             average = movieItem.voteAverage,
             count = movieItem.voteCount

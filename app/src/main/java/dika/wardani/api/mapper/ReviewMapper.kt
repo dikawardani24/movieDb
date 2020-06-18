@@ -28,7 +28,7 @@ object ReviewMapper {
     
     fun toReviewPage(movie: Movie, movieReviewResponse: MovieReviewResponse): Page<Review> {
         return Page(
-            page = movieReviewResponse.page,
+            number = movieReviewResponse.page,
             datas = toReviews(movie, movieReviewResponse.reviews)
         )
     }
