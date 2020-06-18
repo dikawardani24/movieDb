@@ -25,7 +25,7 @@ class MovieRepositoryImpl(
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
             } else {
-                Result.Failed(SystemException("No more data"))
+                Result.Failed<Page<Movie>>(SystemException("No more data"))
             }
         }.onErrorReturn {
             Result.Failed(handle(it))
@@ -43,7 +43,7 @@ class MovieRepositoryImpl(
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
             } else {
-                Result.Failed(SystemException("No more data"))
+                Result.Failed<Page<Movie>>(SystemException("No more data"))
             }
         }.onErrorReturn {
             Result.Failed(handle(it))
@@ -61,7 +61,7 @@ class MovieRepositoryImpl(
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
             } else {
-                Result.Failed(SystemException("No more data"))
+                Result.Failed<Page<Movie>>(SystemException("No more data"))
             }
         }.onErrorReturn {
             Result.Failed(handle(it))

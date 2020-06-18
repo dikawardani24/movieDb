@@ -27,7 +27,7 @@ class ReviewRepositoryImpl(
                 val page = ReviewMapper.toReviewPage(movie = movie, movieReviewResponse = it)
                 Result.Succeed(page)
             } else {
-                Result.Failed(SystemException("No more data"))
+                Result.Failed<Page<Review>>(SystemException("No more data"))
             }
 
         }
