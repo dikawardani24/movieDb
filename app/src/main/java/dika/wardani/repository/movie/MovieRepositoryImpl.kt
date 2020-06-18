@@ -12,7 +12,7 @@ import io.reactivex.Single
 
 class MovieRepositoryImpl(
     private val movieEndPoint: MovieEndPoint
-): BaseRepository(), MovieRepository {
+) : BaseRepository(), MovieRepository {
 
     override fun getTopRatedMovies(pageNumber: Int): Single<Result<Page<Movie>>> {
         return movieEndPoint.getTopRatedMovies(
@@ -22,9 +22,9 @@ class MovieRepositoryImpl(
         ).map {
             val totalFetched = it.result.size
             if (totalFetched > 0) {
-            val page = MovieMapper.toMoviePage(it)
-            Result.Succeed(page)
-            } else{
+                val page = MovieMapper.toMoviePage(it)
+                Result.Succeed(page)
+            } else {
                 Result.Failed(SystemException("No more data"))
             }
         }.onErrorReturn {
@@ -42,7 +42,7 @@ class MovieRepositoryImpl(
             if (totalFetched > 0) {
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
-            } else{
+            } else {
                 Result.Failed(SystemException("No more data"))
             }
         }.onErrorReturn {
@@ -60,7 +60,7 @@ class MovieRepositoryImpl(
             if (totalFetched > 0) {
                 val page = MovieMapper.toMoviePage(it)
                 Result.Succeed(page)
-            } else{
+            } else {
                 Result.Failed(SystemException("No more data"))
             }
         }.onErrorReturn {
