@@ -14,7 +14,7 @@ data class MovieItem(
     @SerializedName("genre_ids")
     var genreIds: List<Int>,
     @SerializedName("id")
-    var id: Long,
+    var id: Int,
     @SerializedName("original_title")
     var originalTitle: String,
     @SerializedName("original_language")

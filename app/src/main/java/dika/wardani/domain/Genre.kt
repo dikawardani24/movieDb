@@ -1,6 +1,6 @@
 package dika.wardani.domain
 
 data class Genre(
-    var id: Long,
+    var id: Int,
     var name: String
 )

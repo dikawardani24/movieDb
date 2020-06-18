@@ -3,7 +3,7 @@ package dika.wardani.domain
 import java.util.*
 
 data class Movie(
-    var id: Long,
+    var id: Int,
     var genres: List<Genre>,
     var movieTarget: MovieTarget,
     var movieImage: MovieImage?,

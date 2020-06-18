@@ -1,10 +1,12 @@
 package dika.wardani.api.mapper
 
+import dika.wardani.api.response.MovieDetailResponse
 import dika.wardani.api.response.NowPlayingMovieResponse
 import dika.wardani.api.response.PopularMovieResponse
 import dika.wardani.api.response.TopRatedMovieResponse
 import dika.wardani.api.response.model.MovieItem
 import dika.wardani.domain.*
+import dika.wardani.domain.Collection
 import dika.wardani.util.DateFormatterHelper
 
 object MovieMapper {
@@ -14,7 +16,7 @@ object MovieMapper {
 
         genres.run {
             movieItem.genreIds.forEach {
-                add(Genre(it.toLong(), ""))
+                add(Genre(it, ""))
             }
         }
 
@@ -83,6 +85,81 @@ object MovieMapper {
         return Page(
             page = popularMovieResponse.page,
             datas = toMovieList(popularMovieResponse.result)
+        )
+    }
+
+    fun toMovie(movieItem: MovieDetailResponse): Movie {
+        val genres = ArrayList<Genre>()
+        genres.run {
+            movieItem.genres.forEach {
+                add(Genre(it.id, it.name))
+            }
+        }
+
+        val image = if (movieItem.backdropPath == null && movieItem.posterPath == null)
+            null else MovieImage(backDropPath = movieItem.backdropPath, posterPath = movieItem.posterPath)
+
+        val vote = Vote(
+            average = movieItem.voteAverage,
+            count = movieItem.voteCount
+        )
+
+        val collection = if (movieItem.belongsToCollection == null)
+            null else Collection(id = movieItem.belongsToCollection.id, name = "")
+
+        val productionCompany = ArrayList<ProductionCompany>()
+        movieItem.productionCompanies.forEach {
+            val company = ProductionCompany(
+                id = it.id,
+                name = it.name,
+                logoPath = it.logoPath,
+                originCountry = it.originCountry
+            )
+            productionCompany.add(company)
+        }
+
+        val productionCountry = ArrayList<ProductionCountry>()
+        movieItem.productionCountries.forEach {
+            val country = ProductionCountry(
+                iso31661 = it.iso31661,
+                name = it.name
+            )
+            productionCountry.add(country)
+        }
+
+        val spokenLanguage = ArrayList<SpokenLanguage>()
+        movieItem.spokenLanguages.forEach {
+            val language = SpokenLanguage(
+                iso6391 = it.iso6391,
+                name = it.name
+            )
+            spokenLanguage.add(language)
+        }
+
+        return Movie(
+            id = movieItem.id,
+            budget = movieItem.budget,
+            collection = collection,
+            genres = genres,
+            hasVideo = movieItem.video,
+            homePage = movieItem.homepage,
+            imdbId = movieItem.imdbId,
+            movieImage = image,
+            movieStatus = MovieStatus.UNKNOWN,
+            movieTarget = if (movieItem.adult) MovieTarget.ADULT else MovieTarget.ALL_AGE,
+            originalLanguage = movieItem.originalLanguage,
+            originalTitle = movieItem.originalTitle,
+            overview = movieItem.overview ?: "",
+            popularity = movieItem.popularity,
+            productionCompanies = productionCompany,
+            productionCountries = productionCountry,
+            releaseDate = DateFormatterHelper.toDateInstance(movieItem.releaseDate),
+            revenue = movieItem.revenue,
+            runtime = movieItem.runtime,
+            spokenLanguages = spokenLanguage,
+            tagline = movieItem.tagline,
+            title = movieItem.title,
+            vote = vote
         )
     }
 }
