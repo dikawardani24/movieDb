@@ -7,7 +7,7 @@ import dika.wardani.domain.Page
 import dika.wardani.domain.Review
 
 object ReviewMapper {
-
+    
     private fun toReview(movie: Movie, reviewItem: ReviewItem): Review {
         return Review(
             id = reviewItem.id,
@@ -20,12 +20,12 @@ object ReviewMapper {
     
     private fun toReviews(movie: Movie, reviewItems: List<ReviewItem>): List<Review> {
         val reviews = ArrayList<Review>()
-        reviewItems.forEach {
+        reviewItems.forEach { 
             reviews.add(toReview(movie, it))
         }
         return reviews
     }
-
+    
     fun toReviewPage(movie: Movie, movieReviewResponse: MovieReviewResponse): Page<Review> {
         return Page(
             page = movieReviewResponse.page,
