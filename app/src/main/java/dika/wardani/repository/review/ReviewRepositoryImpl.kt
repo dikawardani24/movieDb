@@ -15,7 +15,7 @@ class ReviewRepositoryImpl(
     private val reviewEndPoint: ReviewEndPoint
 ): BaseRepository(), ReviewRepository {
 
-    fun getMovieReviews(movie: Movie, pageNumber: Int): Single<Result<Page<Review>>> {
+    override fun getMovieReviews(movie: Movie, pageNumber: Int): Single<Result<Page<Review>>> {
         return reviewEndPoint.getMovieReviews(
             movieId = movie.id,
             apiKey = ApiConfig.API_KEY,
