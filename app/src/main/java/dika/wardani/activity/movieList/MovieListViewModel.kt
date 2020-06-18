@@ -1,6 +1,7 @@
 package dika.wardani.activity.movieList
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,18 +15,30 @@ class MovieListViewModel(
     application: Application,
     private val movieRepository: MovieRepository
 ) : AndroidViewModel(application) {
-    private var currentPage = 1
-    private var currentProsess: Disposable? = null
+    private var currentProcess: Disposable? = null
+    private var currentPage: Int = 1
+    var currentFilterType: FilterType = FilterType.TOP_RATED
 
-    fun stop() {
-        currentProsess?.dispose()
+    fun resetPage() {
+        currentPage = 1
     }
 
-    fun loadTopRatedMovie(): LiveData<Result<List<Movie>>> {
+    fun stop() {
+        currentProcess?.dispose()
+    }
+
+    fun getMovies(): LiveData<Result<List<Movie>>> {
         val liveData = MutableLiveData<Result<List<Movie>>>()
 
-        currentProsess = movieRepository.getTopRatedMovies(currentPage)
-            .subscribeOn(Schedulers.io())
+        Log.d(TAG, "page: $currentPage, filter: $currentFilterType")
+
+        val single = when(currentFilterType) {
+            FilterType.TOP_RATED -> movieRepository.getTopRatedMovies(currentPage)
+            FilterType.NOW_PLAYING -> movieRepository.getNowPlayingMovies(currentPage)
+            FilterType.POPULAR -> movieRepository.getPopularMovies(currentPage)
+        }
+
+        currentProcess = single.subscribeOn(Schedulers.io())
             .doAfterSuccess {
                 when(it) {
                     is Result.Succeed -> {
@@ -41,5 +54,15 @@ class MovieListViewModel(
             .subscribe()
 
         return liveData
+    }
+
+    enum class FilterType {
+        TOP_RATED,
+        POPULAR,
+        NOW_PLAYING
+    }
+
+    companion object {
+        private const val TAG = "MovieListViewModel"
     }
 }

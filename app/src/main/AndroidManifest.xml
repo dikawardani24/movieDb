@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activity.DetailMovieActivity"/>
+        <activity android:name=".activity.detailMovie.DetailMovieActivity"/>
         <activity android:name=".activity.movieList.MovieListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

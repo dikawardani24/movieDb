@@ -1,7 +1,8 @@
-package dika.wardani.activity
+package dika.wardani.activity.detailMovie
 
 import android.os.Bundle
 import dika.wardani.R
+import dika.wardani.activity.BackAbleActivity
 
 class DetailMovieActivity : BackAbleActivity() {
 
