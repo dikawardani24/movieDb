@@ -4,22 +4,15 @@ import android.content.Context
 import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.google.gson.Gson
-import dika.wardani.exception.NotFoundException
-import dika.wardani.exception.SystemException
 import dika.wardani.repository.RepositoryFactory
 import dika.wardani.util.Result
-import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MovieRepositoryImplTest {
-    private val TAG = "MovieRepositoryImplTest"
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
     @Test
@@ -79,21 +72,22 @@ class MovieRepositoryImplTest {
     @Test
     fun getMovieDetail() {
         val repository = RepositoryFactory.getMovieRepository(context)
-        repository.getMovieDetail(1).observeOn(Schedulers.io())
-            .doOnError {
-                assert(it is NotFoundException)
-            }
-            .subscribe { result ->
-                when(result) {
+        repository.getMovieDetail(514847).observeOn(Schedulers.io())
+            .doAfterSuccess {
+                when(it) {
                     is Result.Succeed -> {
-                        val data = result.data
+                        val data = it.data
                         Log.d(TAG, Gson().toJson(data))
                         assert(true)
                     }
                     is Result.Failed -> {
-                        Log.d(TAG, "${result.error.message}")
+                        Log.d(TAG, "${it.error.message}")
                     }
                 }
-            }
+            }.subscribe()
+    }
+
+    companion object {
+        private const val TAG = "MovieRepositoryImplTest"
     }
 }

@@ -10,7 +10,7 @@ import java.net.SocketTimeoutException
 
 abstract class BaseRepository {
 
-    private fun handle404Error(httpException: HttpException): Throwable {
+    private fun handle404Error(httpException: HttpException): SystemException {
         val responseBody = httpException.response()?.errorBody()?.string()
 
         return if (responseBody != null) {
@@ -25,7 +25,7 @@ abstract class BaseRepository {
         }
     }
 
-    protected fun handle(throwable: Throwable): Throwable {
+    protected fun handle(throwable: Throwable): SystemException {
         return when (throwable) {
             is SocketTimeoutException -> SystemException("Request timeout", throwable)
             is ConnectException -> SystemException("Unable to connect to server", throwable)
