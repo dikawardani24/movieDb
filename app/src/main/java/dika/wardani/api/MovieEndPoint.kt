@@ -1,6 +1,7 @@
 package dika.wardani.api
 
 import dika.wardani.api.response.MovieDetailResponse
+import dika.wardani.api.response.MovieReviewResponse
 import dika.wardani.api.response.PopularMovieResponse
 import dika.wardani.api.response.TopRatedMovieResponse
 import io.reactivex.Single
@@ -37,4 +38,12 @@ interface MovieEndPoint {
         @Query("api_key") apiKey: String,
         @Query("language") language: String
     ): Single<MovieDetailResponse>
+
+    @GET("{movieId}/reviews")
+    fun getMovieReviews(
+        @Path("movieId") movieId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Single<MovieReviewResponse>
 }

@@ -52,7 +52,8 @@ object MovieMapper {
             spokenLanguages = emptyList(),
             tagline = null,
             title = movieItem.title,
-            vote = vote
+            vote = vote,
+            reviews = emptyList()
         )
     }
 
@@ -159,7 +160,8 @@ object MovieMapper {
             spokenLanguages = spokenLanguage,
             tagline = movieItem.tagline,
             title = movieItem.title,
-            vote = vote
+            vote = vote,
+            reviews = emptyList()
         )
     }
 }

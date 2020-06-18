@@ -25,5 +25,6 @@ data class Movie(
     var tagline: String?,
     var originalTitle: String,
     var hasVideo: Boolean,
-    var vote: Vote
+    var vote: Vote,
+    var reviews: List<Review>
 )
