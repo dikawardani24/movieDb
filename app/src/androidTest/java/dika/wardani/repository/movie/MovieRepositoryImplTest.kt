@@ -19,33 +19,35 @@ class MovieRepositoryImplTest {
     fun getTopRatedMovies() {
         val repository = RepositoryFactory.getMovieRepository(context)
         repository.getTopRatedMovies(1).observeOn(Schedulers.io())
-            .subscribe { result ->
-                when(result) {
+            .doAfterSuccess {
+                when(it) {
                     is Result.Succeed -> {
-                        val data = result.data
+                        val data = it.data
                         Log.d(TAG, Gson().toJson(data))
                         assert(data.datas.isNotEmpty())
                     }
                     is Result.Failed -> {
-                        throw result.error
+                        Log.d(TAG, "${it.error.message}")
+                        throw it.error
                     }
                 }
-            }
+            }.subscribe()
     }
 
     @Test
     fun getNowPlayingMovies() {
         val repository = RepositoryFactory.getMovieRepository(context)
         repository.getNowPlayingMovies(1).observeOn(Schedulers.io())
-            .subscribe { result ->
-                when(result) {
+            .doAfterSuccess {
+                when(it) {
                     is Result.Succeed -> {
-                        val data = result.data
+                        val data = it.data
                         Log.d(TAG, Gson().toJson(data))
                         assert(data.datas.isNotEmpty())
                     }
                     is Result.Failed -> {
-                        throw result.error
+                        Log.d(TAG, "${it.error.message}")
+                        throw it.error
                     }
                 }
             }
@@ -55,15 +57,16 @@ class MovieRepositoryImplTest {
     fun getPopularMovies() {
         val repository = RepositoryFactory.getMovieRepository(context)
         repository.getPopularMovies(1).observeOn(Schedulers.io())
-            .subscribe { result ->
-                when(result) {
+            .doAfterSuccess {
+                when(it) {
                     is Result.Succeed -> {
-                        val data = result.data
+                        val data = it.data
                         Log.d(TAG, Gson().toJson(data))
                         assert(data.datas.isNotEmpty())
                     }
                     is Result.Failed -> {
-                        throw result.error
+                        Log.d(TAG, "${it.error.message}")
+                        throw it.error
                     }
                 }
             }
@@ -82,6 +85,7 @@ class MovieRepositoryImplTest {
                     }
                     is Result.Failed -> {
                         Log.d(TAG, "${it.error.message}")
+                        throw it.error
                     }
                 }
             }.subscribe()
