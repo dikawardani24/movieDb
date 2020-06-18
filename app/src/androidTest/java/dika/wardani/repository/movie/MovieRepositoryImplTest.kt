@@ -1,13 +1,12 @@
 package dika.wardani.repository.movie
 
 import android.content.Context
-import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.gson.Gson
 import dika.wardani.repository.RepositoryFactory
 import dika.wardani.util.Result
 import io.reactivex.schedulers.Schedulers
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -18,77 +17,42 @@ class MovieRepositoryImplTest {
     @Test
     fun getTopRatedMovies() {
         val repository = RepositoryFactory.getMovieRepository(context)
-        repository.getTopRatedMovies(1).observeOn(Schedulers.io())
-            .doAfterSuccess {
-                when(it) {
-                    is Result.Succeed -> {
-                        val data = it.data
-                        Log.d(TAG, Gson().toJson(data))
-                        assert(data.datas.isNotEmpty())
-                    }
-                    is Result.Failed -> {
-                        Log.d(TAG, "${it.error.message}")
-                        throw it.error
-                    }
-                }
-            }.subscribe()
+        val result = repository.getTopRatedMovies(1).observeOn(Schedulers.io())
+            .blockingGet()
+
+        Assert.assertTrue(result is Result.Succeed)
     }
 
     @Test
     fun getNowPlayingMovies() {
         val repository = RepositoryFactory.getMovieRepository(context)
-        repository.getNowPlayingMovies(1).observeOn(Schedulers.io())
-            .doAfterSuccess {
-                when(it) {
-                    is Result.Succeed -> {
-                        val data = it.data
-                        Log.d(TAG, Gson().toJson(data))
-                        assert(data.datas.isNotEmpty())
-                    }
-                    is Result.Failed -> {
-                        Log.d(TAG, "${it.error.message}")
-                        throw it.error
-                    }
-                }
-            }
+        val result = repository.getNowPlayingMovies(1).observeOn(Schedulers.io())
+            .blockingGet()
+
+        Assert.assertTrue(result is Result.Succeed)
     }
 
     @Test
     fun getPopularMovies() {
         val repository = RepositoryFactory.getMovieRepository(context)
-        repository.getPopularMovies(1).observeOn(Schedulers.io())
-            .doAfterSuccess {
-                when(it) {
-                    is Result.Succeed -> {
-                        val data = it.data
-                        Log.d(TAG, Gson().toJson(data))
-                        assert(data.datas.isNotEmpty())
-                    }
-                    is Result.Failed -> {
-                        Log.d(TAG, "${it.error.message}")
-                        throw it.error
-                    }
-                }
-            }
+        val result = repository.getPopularMovies(1)
+            .observeOn(Schedulers.io())
+            .blockingGet()
+
+        Assert.assertTrue(result is Result.Succeed)
     }
 
     @Test
     fun getMovieDetail() {
+        val notExistMovieId = 1
+        val existMovieId  = 514847
+
         val repository = RepositoryFactory.getMovieRepository(context)
-        repository.getMovieDetail(514847).observeOn(Schedulers.io())
-            .doAfterSuccess {
-                when(it) {
-                    is Result.Succeed -> {
-                        val data = it.data
-                        Log.d(TAG, Gson().toJson(data))
-                        assert(true)
-                    }
-                    is Result.Failed -> {
-                        Log.d(TAG, "${it.error.message}")
-                        throw it.error
-                    }
-                }
-            }.subscribe()
+        val it = repository.getMovieDetail(existMovieId)
+            .observeOn(Schedulers.io())
+            .blockingGet()
+
+        Assert.assertTrue(it is Result.Succeed)
     }
 
     companion object {
