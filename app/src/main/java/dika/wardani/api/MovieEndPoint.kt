@@ -38,12 +38,4 @@ interface MovieEndPoint {
         @Query("api_key") apiKey: String,
         @Query("language") language: String
     ): Single<MovieDetailResponse>
-
-    @GET("{movieId}/reviews")
-    fun getMovieReviews(
-        @Path("movieId") movieId: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String,
-        @Query("page") page: Int
-    ): Single<MovieReviewResponse>
 }
