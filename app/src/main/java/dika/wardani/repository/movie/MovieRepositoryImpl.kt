@@ -6,7 +6,6 @@ import dika.wardani.api.mapper.MovieMapper
 import dika.wardani.domain.Movie
 import dika.wardani.domain.Page
 import dika.wardani.exception.NotMoreDataException
-import dika.wardani.exception.SystemException
 import dika.wardani.repository.BaseRepository
 import dika.wardani.util.Result
 import io.reactivex.Single

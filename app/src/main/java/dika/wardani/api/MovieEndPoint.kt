@@ -1,9 +1,6 @@
 package dika.wardani.api
 
-import dika.wardani.api.response.MovieDetailResponse
-import dika.wardani.api.response.MovieReviewResponse
-import dika.wardani.api.response.PopularMovieResponse
-import dika.wardani.api.response.TopRatedMovieResponse
+import dika.wardani.api.response.*
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -23,7 +20,7 @@ interface MovieEndPoint {
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): Single<TopRatedMovieResponse>
+    ): Single<NowPlayingMovieResponse>
 
     @GET("popular")
     fun getPopularMovies(
