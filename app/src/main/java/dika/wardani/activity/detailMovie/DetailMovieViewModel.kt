@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dika.wardani.domain.Movie
+import dika.wardani.domain.Review
 import dika.wardani.repository.movie.MovieRepository
 import dika.wardani.repository.review.ReviewRepository
 import dika.wardani.util.Result
@@ -16,15 +17,16 @@ class DetailMovieViewModel(
     private val reviewRepository: ReviewRepository
 ): AndroidViewModel(application) {
 
-    private fun loadReviews(liveData: MutableLiveData<Result<Movie>>, movie: Movie) {
+    fun loadReviews(movie: Movie): LiveData<Result<List<Review>>> {
+        val liveData = MutableLiveData<Result<List<Review>>>()
+
         reviewRepository.getMovieReviews(movie, 1)
             .subscribeOn(Schedulers.io())
             .doAfterSuccess {
                 when(it) {
                     is Result.Succeed -> {
-                        val reviews = it.data
-                        movie.reviews = reviews.datas
-                        liveData.postValue(Result.Succeed(movie))
+                        val page = it.data
+                        liveData.postValue(Result.Succeed(page.datas))
                     }
                     is Result.Failed -> {
                         liveData.postValue(Result.Failed(it.error))
@@ -32,6 +34,8 @@ class DetailMovieViewModel(
                 }
             }
             .subscribe()
+
+        return liveData
     }
 
     fun loadDetailMovie(movieId: Int): LiveData<Result<Movie>> {
@@ -43,7 +47,7 @@ class DetailMovieViewModel(
                 when(it) {
                     is Result.Succeed -> {
                         val movie = it.data
-                        loadReviews(liveData, movie)
+                        liveData.postValue(Result.Succeed(movie))
                     }
                     is Result.Failed -> {
                         liveData.postValue(Result.Failed(it.error))

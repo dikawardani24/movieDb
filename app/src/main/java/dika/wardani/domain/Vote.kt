@@ -1,6 +1,6 @@
 package dika.wardani.domain
 
 data class Vote(
-    var average: Double,
-    var count: Int
+    var average: Double = 0.0,
+    var count: Int = 0
 )

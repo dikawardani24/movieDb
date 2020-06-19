@@ -1,8 +1,8 @@
 package dika.wardani.domain
 
 data class ProductionCompany(
-    var id: Int,
-    var name: String,
-    var logoPath: String?,
-    var originCountry: String
+    var id: Int = 0,
+    var name: String = "",
+    var logoPath: String? = null,
+    var originCountry: String = ""
 )

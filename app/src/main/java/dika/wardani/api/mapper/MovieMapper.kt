@@ -27,7 +27,6 @@ object MovieMapper {
             posterPath = "$imageBaseUrl${movieItem.posterPath}"
         )
 
-
         val vote = Vote(
             average = movieItem.voteAverage,
             count = movieItem.voteCount
@@ -35,12 +34,8 @@ object MovieMapper {
 
         return Movie(
             id = movieItem.id,
-            budget = 0,
-            collection = null,
             genres = genres,
             hasVideo = movieItem.video,
-            homePage = null,
-            imdbId = null,
             movieImage = image,
             movieStatus = MovieStatus.UNKNOWN,
             movieTarget = if (movieItem.adult) MovieTarget.ADULT else MovieTarget.ALL_AGE,
@@ -48,16 +43,9 @@ object MovieMapper {
             originalTitle = movieItem.originalTitle,
             overview = movieItem.overview,
             popularity = movieItem.popularity,
-            productionCompanies = emptyList(),
-            productionCountries = emptyList(),
             releaseDate = DateFormatterHelper.toDateInstance(movieItem.releaseDate),
-            revenue = 0,
-            runtime = 0,
-            spokenLanguages = emptyList(),
-            tagline = null,
             title = movieItem.title,
-            vote = vote,
-            reviews = emptyList()
+            vote = vote
         )
     }
 
@@ -167,8 +155,7 @@ object MovieMapper {
             spokenLanguages = spokenLanguage,
             tagline = movieItem.tagline,
             title = movieItem.title,
-            vote = vote,
-            reviews = emptyList()
+            vote = vote
         )
     }
 }

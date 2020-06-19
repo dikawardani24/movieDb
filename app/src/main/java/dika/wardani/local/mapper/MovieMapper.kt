@@ -27,29 +27,12 @@ object MovieMapper {
 
         return Movie(
             id = movieItem.movieId,
-            budget = 0,
-            collection = null,
-            genres = emptyList(),
-            hasVideo = false,
-            homePage = null,
-            imdbId = null,
             movieImage = image,
             movieStatus = MovieStatus.UNKNOWN,
             movieTarget = MovieTarget.ALL_AGE,
-            originalLanguage = "",
-            originalTitle = "",
             overview = movieItem.overview,
-            popularity = 0.0,
-            productionCompanies = emptyList(),
-            productionCountries = emptyList(),
             releaseDate = DateFormatterHelper.toDateInstance(movieItem.releaseDate),
-            revenue = 0,
-            runtime = 0,
-            spokenLanguages = emptyList(),
-            tagline = null,
-            title = movieItem.title,
-            vote = Vote(0.0, 0),
-            reviews = emptyList()
+            title = movieItem.title
         )
     }
 

@@ -1,7 +1,6 @@
 package dika.wardani.activity.detailMovie
 
 import android.os.Bundle
-import android.widget.Adapter
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
@@ -32,6 +31,20 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
         movieOverview.text = movie.overview
     }
 
+    private fun loadReviews(movie: Movie) {
+        viewModel.loadReviews(movie).observe(this, Observer {
+            when(it) {
+                is Result.Succeed -> {
+                    adapter.reviews = it.data
+                    adapter.notifyDataSetChanged()
+                }
+                is Result.Failed -> {
+
+                }
+            }
+        })
+    }
+
     private fun loadDetailMovie() {
         val receivedId = intent.getIntExtra(KEY_MOVIE, 0)
         viewModel.loadDetailMovie(receivedId).observe(this, Observer {
@@ -39,8 +52,10 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
                 is Result.Succeed -> {
                     val movie = it.data
                     showDataMovie(movie)
-                    adapter.reviews = movie.reviews
-                    adapter.notifyDataSetChanged()
+                    loadReviews(movie)
+                }
+                is Result.Failed -> {
+
                 }
             }
         })
