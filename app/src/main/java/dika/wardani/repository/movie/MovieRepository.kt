@@ -11,4 +11,5 @@ interface MovieRepository {
     fun getNowPlayingMovies(pageNumber: Int): Single<Result<Page<Movie>>>
     fun getPopularMovies(pageNumber: Int): Single<Result<Page<Movie>>>
     fun getMovieDetail(movieId: Int): Single<Result<Movie>>
+    fun saveFavourite(movie: Movie): Single<Result<Unit>>
 }

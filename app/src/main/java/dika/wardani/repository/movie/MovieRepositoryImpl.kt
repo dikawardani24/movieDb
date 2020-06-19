@@ -6,12 +6,16 @@ import dika.wardani.api.mapper.MovieMapper
 import dika.wardani.domain.Movie
 import dika.wardani.domain.Page
 import dika.wardani.exception.NotMoreDataException
+import dika.wardani.exception.SystemException
+import dika.wardani.local.dao.FavouriteMovieDao
 import dika.wardani.repository.BaseRepository
 import dika.wardani.util.Result
 import io.reactivex.Single
+import java.lang.Exception
 
 class MovieRepositoryImpl(
-    private val movieEndPoint: MovieEndPoint
+    private val movieEndPoint: MovieEndPoint,
+    private val favouriteMovieDao: FavouriteMovieDao
 ) : BaseRepository(), MovieRepository {
 
     override fun getTopRatedMovies(pageNumber: Int): Single<Result<Page<Movie>>> {
@@ -79,6 +83,18 @@ class MovieRepositoryImpl(
             result
         }.onErrorReturn {
             Result.Failed(handle(it))
+        }
+    }
+
+    override fun saveFavourite(movie: Movie): Single<Result<Unit>> {
+        return Single.create {
+            try {
+                val entity = dika.wardani.local.mapper.MovieMapper.toEntity(movie)
+                favouriteMovieDao.save(entity)
+                Result.Succeed(Unit)
+            } catch (e: Exception) {
+                Result.Failed<Result<Unit>>(SystemException("Unable to save favourite movie", e))
+            }
         }
     }
 }

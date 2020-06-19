@@ -4,6 +4,7 @@ import android.content.Context
 import dika.wardani.api.ApiClient
 import dika.wardani.api.MovieEndPoint
 import dika.wardani.api.ReviewEndPoint
+import dika.wardani.local.AppDatabase
 import dika.wardani.repository.movie.MovieRepository
 import dika.wardani.repository.movie.MovieRepositoryImpl
 import dika.wardani.repository.review.ReviewRepository
@@ -18,7 +19,8 @@ object RepositoryFactory {
         )
 
         return MovieRepositoryImpl(
-            movieEndPoint = endpoint
+            movieEndPoint = endpoint,
+            favouriteMovieDao = AppDatabase.getInstance(context).favouriteMovieDao
         )
     }
 

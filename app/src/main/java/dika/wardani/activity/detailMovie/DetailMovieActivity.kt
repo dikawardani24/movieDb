@@ -1,6 +1,11 @@
 package dika.wardani.activity.detailMovie
 
+import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
@@ -14,9 +19,24 @@ import dika.wardani.util.DateFormatterHelper
 import dika.wardani.util.Result
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 
+
 class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPageListener {
     private lateinit var viewModel: DetailMovieViewModel
     private lateinit var adapter: ReviewItemAdapter
+
+    private fun saveFavouriteMovie() {
+        viewModel.saveMoveAsFavourite().observe(this, Observer {
+            when(it) {
+                is Result.Succeed -> {
+                    favouriteBtn.setImageResource(R.drawable.ic_favorite_black_24dp)
+                }
+                is Result.Failed -> {
+                    Toast.makeText(this, it.error.message, Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        })
+    }
 
     private fun showDataMovie(movie: Movie) {
         Picasso.get().load(movie.movieImage?.posterPath)
@@ -75,11 +95,16 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
         reviewsRv.adapter = adapter
         reviewsRv.layoutManager = LinearLayoutManager(this)
 
+        favouriteBtn.setOnClickListener { saveFavouriteMovie() }
+
         loadDetailMovie()
     }
 
     override fun onOpenReviewPage(review: Review) {
-
+        val url = review.url
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        startActivity(i)
     }
 
     companion object {

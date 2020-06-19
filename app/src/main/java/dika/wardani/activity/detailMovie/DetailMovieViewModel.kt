@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dika.wardani.domain.Movie
 import dika.wardani.domain.Review
+import dika.wardani.exception.SystemException
 import dika.wardani.repository.movie.MovieRepository
 import dika.wardani.repository.review.ReviewRepository
 import dika.wardani.util.Result
@@ -16,7 +17,27 @@ class DetailMovieViewModel(
     private val movieRepository: MovieRepository,
     private val reviewRepository: ReviewRepository
 ): AndroidViewModel(application) {
+    private var currentMovie: Movie? = null
 
+    fun saveMoveAsFavourite(): LiveData<Result<Unit>> {
+        val liveData = MutableLiveData<Result<Unit>>()
+
+        val movieToSave = currentMovie
+        if (movieToSave != null) {
+            movieRepository.saveFavourite(movieToSave)
+                .subscribeOn(Schedulers.io())
+                .doAfterSuccess {
+                    when(it) {
+                        is Result.Succeed -> liveData.postValue(Result.Succeed(Unit))
+                        is Result.Failed -> liveData.postValue(Result.Failed(it.error))
+                    }
+                }
+                .subscribe()
+        } else {
+            liveData.postValue(Result.Failed(SystemException("No data movie")))
+        }
+        return liveData
+    }
     fun loadReviews(movie: Movie): LiveData<Result<List<Review>>> {
         val liveData = MutableLiveData<Result<List<Review>>>()
 
@@ -47,6 +68,7 @@ class DetailMovieViewModel(
                 when(it) {
                     is Result.Succeed -> {
                         val movie = it.data
+                        currentMovie = movie
                         liveData.postValue(Result.Succeed(movie))
                     }
                     is Result.Failed -> {
