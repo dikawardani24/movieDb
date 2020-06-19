@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_movie.view.*
 class MovieItemAdapter(
     private val context: Context
 ): RecyclerView.Adapter<MovieItemAdapter.ViewHolder>() {
-    var movies: List<Movie> = emptyList()
+    var movies: ArrayList<Movie> = ArrayList()
     var onSelectedMovieListener: OnSelectedMovieListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
