@@ -5,7 +5,9 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
@@ -26,12 +28,16 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
 
     private fun saveFavouriteMovie() {
         viewModel.saveMoveAsFavourite().observe(this, Observer {
+            Log.d(TAG, it.toString())
+
             when(it) {
                 is Result.Succeed -> {
-                    favouriteBtn.setImageResource(R.drawable.ic_favorite_black_24dp)
+                    favouriteBtn.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_black_24dp))
+                    Toast.makeText(this, "Saved successfully", Toast.LENGTH_LONG)
+                        .show()
                 }
                 is Result.Failed -> {
-                    Toast.makeText(this, it.error.message, Toast.LENGTH_LONG)
+                    Toast.makeText(this, "${it.error.message}, cause : ${it.error.cause?.message}", Toast.LENGTH_LONG)
                         .show()
                 }
             }

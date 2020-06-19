@@ -1,5 +1,6 @@
 package dika.wardani.repository.movie
 
+import android.util.Log
 import dika.wardani.api.ApiConfig
 import dika.wardani.api.MovieEndPoint
 import dika.wardani.api.mapper.MovieMapper
@@ -90,11 +91,16 @@ class MovieRepositoryImpl(
         return Single.create {
             try {
                 val entity = dika.wardani.local.mapper.MovieMapper.toEntity(movie)
+                Log.d(TAG, entity.toString())
                 favouriteMovieDao.save(entity)
-                Result.Succeed(Unit)
+                it.onSuccess(Result.Succeed(Unit))
             } catch (e: Exception) {
-                Result.Failed<Result<Unit>>(SystemException("Unable to save favourite movie", e))
+                it.onSuccess(Result.Failed(SystemException("Unable to save favourite movie", e)))
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "MovieRepositoryImpl"
     }
 }

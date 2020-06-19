@@ -1,6 +1,7 @@
 package dika.wardani.activity.detailMovie
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,10 +28,14 @@ class DetailMovieViewModel(
             movieRepository.saveFavourite(movieToSave)
                 .subscribeOn(Schedulers.io())
                 .doAfterSuccess {
+                    Log.d(TAG, it.toString())
                     when(it) {
                         is Result.Succeed -> liveData.postValue(Result.Succeed(Unit))
                         is Result.Failed -> liveData.postValue(Result.Failed(it.error))
                     }
+                }
+                .doOnError {
+                    Log.d(TAG, "${it.message}")
                 }
                 .subscribe()
         } else {
@@ -79,5 +84,9 @@ class DetailMovieViewModel(
             .subscribe()
 
         return liveData
+    }
+
+    companion object {
+        private const val TAG = "DetailMovieViewModel"
     }
 }
