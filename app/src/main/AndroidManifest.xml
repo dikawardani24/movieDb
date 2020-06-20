@@ -14,17 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activity.favouriteMovie.FavouriteMovieActivity"
-            android:label="My Favourite Movies"/>
-        <activity android:name=".activity.detailMovie.DetailMovieActivity"
-            android:label="Detail Movie"/>
-        <activity android:name=".activity.movieList.MovieListActivity">
+        <activity android:name=".activity.SplashScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.favouriteMovie.FavouriteMovieActivity"
+            android:label="My Favourite Movies" />
+        <activity
+            android:name=".activity.detailMovie.DetailMovieActivity"
+            android:label="Detail Movie" />
+        <activity android:name=".activity.movieList.MovieListActivity"/>
     </application>
 
 </manifest>
