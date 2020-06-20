@@ -83,6 +83,7 @@ class FavouriteMovieActivity : BackAbleActivity(), FavouriteMovieItemAdapter.OnS
         viewModel.resetPage()
         adapter.movies.clear()
         adapter.notifyDataSetChanged()
+        scrollListener.isLastPage = false
         loadFavouriteMovies()
     }
 

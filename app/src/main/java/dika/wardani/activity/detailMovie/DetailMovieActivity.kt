@@ -89,7 +89,6 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
             when(it) {
                 is Result.Succeed -> {
                     setAsFavourite(viewModel.isFavourite)
-                    showWarning(it.data)
                 }
                 is Result.Failed -> {
                     val error = it.error
