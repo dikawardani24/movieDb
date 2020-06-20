@@ -17,7 +17,7 @@ object MovieMapper {
         )
     }
 
-    private fun toMovie(movieItem: FavouriteMovieEntity): Movie {
+    fun toMovie(movieItem: FavouriteMovieEntity): Movie {
         val image = if (movieItem.backDropPath == null && movieItem.posterPath == null)
             null else MovieImage(
             backDropPath = movieItem.backDropPath,

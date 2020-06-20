@@ -1,12 +1,9 @@
 package dika.wardani.activity.detailMovie
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +16,7 @@ import dika.wardani.domain.Review
 import dika.wardani.repository.RepositoryFactory
 import dika.wardani.util.DateFormatterHelper
 import dika.wardani.util.Result
+import dika.wardani.util.showWarning
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 
 
@@ -26,19 +24,34 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
     private lateinit var viewModel: DetailMovieViewModel
     private lateinit var adapter: ReviewItemAdapter
 
-    private fun saveFavouriteMovie() {
-        viewModel.saveMoveAsFavourite().observe(this, Observer {
+    private fun setAsFavourite(isFavourite: Boolean) {
+        val icon = if (isFavourite) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp
+        favouriteBtn.setImageDrawable(ContextCompat.getDrawable(this, icon))
+    }
+
+    private fun determineFavMovie() {
+        viewModel.isFavouriteMovie().observe(this, Observer {
+            when(it) {
+                is Result.Succeed -> {
+                    val isFavourite = it.data
+                    setAsFavourite(isFavourite)
+                }
+            }
+        })
+    }
+
+    private fun changeFavouriteMovie() {
+        viewModel.changeMovieAsFavourite().observe(this, Observer {
             Log.d(TAG, it.toString())
 
             when(it) {
                 is Result.Succeed -> {
-                    favouriteBtn.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_black_24dp))
-                    Toast.makeText(this, "Saved successfully", Toast.LENGTH_LONG)
-                        .show()
+                    setAsFavourite(true)
+                    showWarning(it.data)
                 }
                 is Result.Failed -> {
-                    Toast.makeText(this, "${it.error.message}, cause : ${it.error.cause?.message}", Toast.LENGTH_LONG)
-                        .show()
+                    val error = it.error
+                    showWarning(error.message)
                 }
             }
         })
@@ -57,8 +70,8 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
         movieOverview.text = movie.overview
     }
 
-    private fun loadReviews(movie: Movie) {
-        viewModel.loadReviews(movie).observe(this, Observer {
+    private fun loadReviews() {
+        viewModel.loadReviews().observe(this, Observer {
             when(it) {
                 is Result.Succeed -> {
                     adapter.reviews = it.data
@@ -78,7 +91,8 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
                 is Result.Succeed -> {
                     val movie = it.data
                     showDataMovie(movie)
-                    loadReviews(movie)
+                    determineFavMovie()
+                    loadReviews()
                 }
                 is Result.Failed -> {
 
@@ -101,7 +115,7 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
         reviewsRv.adapter = adapter
         reviewsRv.layoutManager = LinearLayoutManager(this)
 
-        favouriteBtn.setOnClickListener { saveFavouriteMovie() }
+        favouriteBtn.setOnClickListener { changeFavouriteMovie() }
 
         loadDetailMovie()
     }

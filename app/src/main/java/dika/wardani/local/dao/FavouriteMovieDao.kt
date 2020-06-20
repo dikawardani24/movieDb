@@ -1,9 +1,6 @@
 package dika.wardani.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import dika.wardani.local.entity.FavouriteMovieEntity
 
 @Dao
@@ -22,4 +19,7 @@ interface FavouriteMovieDao {
 
     @Query("SELECT COUNT(*) FROM fav_movie")
     fun count(): Int
+
+    @Delete
+    fun delete(favouriteMovieEntity: FavouriteMovieEntity)
 }

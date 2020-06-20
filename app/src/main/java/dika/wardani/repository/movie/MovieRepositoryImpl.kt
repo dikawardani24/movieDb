@@ -6,6 +6,7 @@ import dika.wardani.api.MovieEndPoint
 import dika.wardani.api.mapper.MovieMapper
 import dika.wardani.domain.Movie
 import dika.wardani.domain.Page
+import dika.wardani.exception.AllreadyExistException
 import dika.wardani.exception.NotFoundException
 import dika.wardani.exception.NotMoreDataException
 import dika.wardani.exception.SystemException
@@ -90,10 +91,15 @@ class MovieRepositoryImpl(
     override fun saveFavourite(movie: Movie): Single<Result<Unit>> {
         return Single.create {
             try {
-                val entity = dika.wardani.local.mapper.MovieMapper.toEntity(movie)
-                Log.d(TAG, entity.toString())
-                favouriteMovieDao.save(entity)
-                it.onSuccess(Result.Succeed(Unit))
+                val foundEntity = favouriteMovieDao.findById(movieId = movie.id)
+                if (foundEntity == null) {
+                    val entity = dika.wardani.local.mapper.MovieMapper.toEntity(movie)
+                    Log.d(TAG, entity.toString())
+                    favouriteMovieDao.save(entity)
+                    it.onSuccess(Result.Succeed(Unit))
+                } else {
+                    it.onSuccess(Result.Failed(AllreadyExistException("Movie is already on favourite")))
+                }
             } catch (e: Exception) {
                 it.onSuccess(Result.Failed(SystemException("Unable to save favourite movie", e)))
             }
@@ -126,6 +132,38 @@ class MovieRepositoryImpl(
 
             } catch (e: Exception) {
                 it.onSuccess(Result.Failed(SystemException("Unable to load favourite movies", e)))
+            }
+        }
+    }
+
+    override fun findFavouriteMovie(movieId: Int): Single<Result<Movie>> {
+        return Single.create {
+            try {
+                val foundMovieEntity = favouriteMovieDao.findById(movieId)
+                if (foundMovieEntity != null) {
+                    val foundMovie = dika.wardani.local.mapper.MovieMapper.toMovie(foundMovieEntity)
+                    it.onSuccess(Result.Succeed(foundMovie))
+                } else {
+                    it.onSuccess(Result.Failed(NotFoundException("No data movie with id : $movieId")))
+                }
+            } catch (e: Exception) {
+                it.onSuccess(Result.Failed(SystemException("Unable to find movie", e)))
+            }
+        }
+    }
+
+    override fun deleteFavourite(movie: Movie): Single<Result<Unit>> {
+        return Single.create {
+            try {
+                val foundMovieEntity = favouriteMovieDao.findById(movieId = movie.id)
+                if (foundMovieEntity != null) {
+                    favouriteMovieDao.delete(foundMovieEntity)
+                    it.onSuccess(Result.Succeed(Unit))
+                } else {
+                    it.onSuccess(Result.Failed(NotFoundException("No data movie with id : ${movie.id}")))
+                }
+            } catch (e: Exception) {
+                it.onSuccess(Result.Failed(SystemException("Unable to find movie", e)))
             }
         }
     }

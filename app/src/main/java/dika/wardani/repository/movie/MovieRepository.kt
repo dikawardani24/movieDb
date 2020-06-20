@@ -12,5 +12,7 @@ interface MovieRepository {
     fun getPopularMovies(pageNumber: Int): Single<Result<Page<Movie>>>
     fun getMovieDetail(movieId: Int): Single<Result<Movie>>
     fun saveFavourite(movie: Movie): Single<Result<Unit>>
+    fun deleteFavourite(movie: Movie): Single<Result<Unit>>
     fun loadFavouriteMovie(pageNumber: Int): Single<Result<Page<Movie>>>
+    fun findFavouriteMovie(movieId: Int): Single<Result<Movie>>
 }
