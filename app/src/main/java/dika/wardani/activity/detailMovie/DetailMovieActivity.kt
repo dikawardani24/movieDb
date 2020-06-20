@@ -30,7 +30,7 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
     }
 
     private fun determineFavMovie() {
-        viewModel.isFavouriteMovie().observe(this, Observer {
+        viewModel.determineFavouriteMovie().observe(this, Observer {
             when(it) {
                 is Result.Succeed -> {
                     val isFavourite = it.data
@@ -46,7 +46,7 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
 
             when(it) {
                 is Result.Succeed -> {
-                    setAsFavourite(true)
+                    setAsFavourite(viewModel.isFavourite)
                     showWarning(it.data)
                 }
                 is Result.Failed -> {

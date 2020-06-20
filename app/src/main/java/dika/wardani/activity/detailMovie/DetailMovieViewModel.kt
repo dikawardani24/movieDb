@@ -20,9 +20,9 @@ class DetailMovieViewModel(
     private val reviewRepository: ReviewRepository
 ): AndroidViewModel(application) {
     private var currentMovie: Movie? = null
-    private var isFavourite: Boolean = false
+    var isFavourite: Boolean = false
 
-    fun isFavouriteMovie(): LiveData<Result<Boolean>> {
+    fun determineFavouriteMovie(): LiveData<Result<Boolean>> {
         val liveData = MutableLiveData<Result<Boolean>>()
 
         val movie = currentMovie
@@ -61,7 +61,10 @@ class DetailMovieViewModel(
             .doAfterSuccess {
                 Log.d(TAG, "$it")
                 when(it) {
-                    is Result.Succeed -> liveData.postValue(Result.Succeed("Movie has been marked from favourite list"))
+                    is Result.Succeed -> {
+                        isFavourite = true
+                        liveData.postValue(Result.Succeed("Movie has been marked from favourite list"))
+                    }
                     is Result.Failed -> liveData.postValue(Result.Failed(it.error))
                 }
             }
@@ -74,7 +77,10 @@ class DetailMovieViewModel(
             .doAfterSuccess {
                 Log.d(TAG, "$it")
                 when(it) {
-                    is Result.Succeed -> liveData.postValue(Result.Succeed("Movie has been removed as favourite"))
+                    is Result.Succeed -> {
+                        isFavourite = false
+                        liveData.postValue(Result.Succeed("Movie has been removed as favourite"))
+                    }
                     is Result.Failed -> liveData.postValue(Result.Failed(it.error))
                 }
             }
