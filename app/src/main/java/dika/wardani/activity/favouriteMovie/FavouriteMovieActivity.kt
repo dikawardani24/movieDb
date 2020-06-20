@@ -8,18 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dika.wardani.R
 import dika.wardani.activity.BackAbleActivity
 import dika.wardani.activity.detailMovie.DetailMovieActivity
-import dika.wardani.adapter.MovieItemAdapter
+import dika.wardani.adapter.FavouriteMovieItemAdapter
 import dika.wardani.adapter.ScrollListener
 import dika.wardani.domain.Movie
 import dika.wardani.exception.NotMoreDataException
 import dika.wardani.repository.RepositoryFactory
 import dika.wardani.util.Result
+import dika.wardani.util.showWarning
 import dika.wardani.util.startActivity
 import kotlinx.android.synthetic.main.activity_favourite_movie.*
 
-class FavouriteMovieActivity : BackAbleActivity(), MovieItemAdapter.OnSelectedMovieListener, ScrollListener.OnLoadMoreListener {
+class FavouriteMovieActivity : BackAbleActivity(), FavouriteMovieItemAdapter.OnSelectedMovieListener, ScrollListener.OnLoadMoreListener {
     private lateinit var viewModel: FavouriteMoviesViewModel
-    private lateinit var adapter: MovieItemAdapter
+    private lateinit var adapter: FavouriteMovieItemAdapter
     private lateinit var scrollListener: ScrollListener
 
     private fun showNoData(show: Boolean) {
@@ -92,7 +93,7 @@ class FavouriteMovieActivity : BackAbleActivity(), MovieItemAdapter.OnSelectedMo
             movieRepository = RepositoryFactory.getMovieRepository(this)
         )
 
-        adapter = MovieItemAdapter(this)
+        adapter = FavouriteMovieItemAdapter(this)
         adapter.onSelectedMovieListener = this
         favMoviesRv.adapter = adapter
 
@@ -118,6 +119,25 @@ class FavouriteMovieActivity : BackAbleActivity(), MovieItemAdapter.OnSelectedMo
         startActivity(DetailMovieActivity::class) {
             putExtra(DetailMovieActivity.KEY_MOVIE, movie.id)
         }
+    }
+
+    override fun onRemoveAsFavourite(movie: Movie) {
+        viewModel.removeFromFavourite(movie).observe(this, Observer {
+            when(it) {
+                is Result.Succeed -> {
+                    adapter.run {
+                        movies.remove(movie)
+                        notifyDataSetChanged()
+                    }
+                    showWarning("Movie has been removed from your favourite")
+                }
+                is Result.Failed -> {
+                    showWarning("${it.error}")
+                }
+            }
+
+            showNoData(adapter.itemCount <= 0)
+        })
     }
 
     companion object {

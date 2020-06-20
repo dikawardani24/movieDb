@@ -29,6 +29,22 @@ class FavouriteMoviesViewModel(
         }
     }
 
+    fun removeFromFavourite(movie: Movie): LiveData<Result<Unit>> {
+        val liveData = MutableLiveData<Result<Unit>>()
+
+        currentProcess = movieRepository.deleteFavourite(movie)
+            .subscribeOn(Schedulers.io())
+            .doAfterSuccess {
+                when(it) {
+                    is Result.Succeed -> liveData.postValue(Result.Succeed(it.data))
+                    is Result.Failed -> liveData.postValue(Result.Failed(it.error))
+                }
+            }
+            .subscribe()
+
+        return liveData
+    }
+
     fun loadFavouriteViewModel(): LiveData<Result<List<Movie>>> {
         val liveData = MutableLiveData<Result<List<Movie>>>()
 
@@ -47,7 +63,6 @@ class FavouriteMoviesViewModel(
                         Log.d(TAG, "${it.error.message}")
                         liveData.postValue(Result.Failed(it.error))
                     }
-
                 }
             }
             .subscribe()
