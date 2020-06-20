@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
         android:layout_marginLeft="10dp"
@@ -51,6 +51,18 @@
                     android:layout_height="wrap_content"
                     android:text="Release date"
                     tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/voteAverageRb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stepSize="0.1"
+                    android:rating="0"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:max="5"
+                    android:theme="@style/AppTheme.RatingBar"
+                    style="@style/Widget.AppCompat.RatingBar.Small"/>
 
                 <TextView
                     android:id="@+id/movieOverview"

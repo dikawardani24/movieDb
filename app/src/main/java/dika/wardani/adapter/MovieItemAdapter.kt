@@ -54,6 +54,7 @@ class MovieItemAdapter(
                 movieTitle.text = movie.title
                 movieReleaseDate.text = DateFormatterHelper.format(movie.releaseDate)
                 movieOverview.text = movie.overview
+                voteAverageRb.rating = (movie.vote.average / 2).toFloat()
             }
         }
     }
