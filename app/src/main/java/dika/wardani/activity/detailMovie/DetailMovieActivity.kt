@@ -25,8 +25,9 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
     private lateinit var adapter: ReviewItemAdapter
 
     private fun setAsFavourite(isFavourite: Boolean) {
-        val icon = if (isFavourite) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp
-        favouriteBtn.setImageDrawable(ContextCompat.getDrawable(this, icon))
+        val icon = if (isFavourite) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_border_black_24dp
+        val drawable = ContextCompat.getDrawable(this, icon)
+        favouriteBtn.setImageDrawable(drawable)
     }
 
     private fun determineFavMovie() {
