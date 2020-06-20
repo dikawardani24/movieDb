@@ -58,24 +58,18 @@ class MovieListActivity : AppCompatActivity(), MovieItemAdapter.OnSelectedMovieL
                 adapter.movies.clear()
                 adapter.notifyDataSetChanged()
 
-                val titleFilter: String
                 when(it.id) {
                     R.id.popularTv -> {
-                        titleFilter = "Popular"
                         viewModel.currentFilterType = MovieListViewModel.FilterType.POPULAR
                     }
                     R.id.nowPlayingTv -> {
-                        titleFilter = "Now Playing"
                         viewModel.currentFilterType = MovieListViewModel.FilterType.NOW_PLAYING
                     }
                     R.id.topRatedTv -> {
-                        titleFilter = "Top Rated"
                         viewModel.currentFilterType = MovieListViewModel.FilterType.TOP_RATED
                     }
-                    else -> titleFilter = ""
                 }
 
-                this@MovieListActivity.title = "${getString(R.string.app_name)} | $titleFilter"
                 viewModel.resetPage()
                 hide()
                 loadMovies()

@@ -28,21 +28,14 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
     private lateinit var adapter: ReviewItemAdapter
 
     private fun expandReviews(expand: Boolean) {
-        val layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
-        )
 
         if (expand) {
             movieImg.visibility = View.GONE
             movieOverview.visibility = View.GONE
-            layoutParams.setMargins(0, 20, 0, 0)
         } else {
             movieImg.visibility = View.VISIBLE
             movieOverview.visibility = View.VISIBLE
-            layoutParams.setMargins(0, 480, 0, 0)
         }
-
-        movieDetailContainer.layoutParams = layoutParams
     }
 
     private fun showNoData(show: Boolean) {
