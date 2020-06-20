@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,13 +21,29 @@ import dika.wardani.util.DateFormatterHelper
 import dika.wardani.util.Result
 import dika.wardani.util.showWarning
 import kotlinx.android.synthetic.main.activity_detail_movie.*
-import kotlinx.android.synthetic.main.activity_detail_movie.noDataContainer
-import kotlinx.android.synthetic.main.activity_favourite_movie.*
 
 
 class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPageListener {
     private lateinit var viewModel: DetailMovieViewModel
     private lateinit var adapter: ReviewItemAdapter
+
+    private fun expandReviews(expand: Boolean) {
+        val layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        if (expand) {
+            movieImg.visibility = View.GONE
+            movieOverview.visibility = View.GONE
+            layoutParams.setMargins(0, 20, 0, 0)
+        } else {
+            movieImg.visibility = View.VISIBLE
+            movieOverview.visibility = View.VISIBLE
+            layoutParams.setMargins(0, 480, 0, 0)
+        }
+
+        movieDetailContainer.layoutParams = layoutParams
+    }
 
     private fun showNoData(show: Boolean) {
         if (show) {
@@ -147,6 +165,7 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
         reviewsRv.layoutManager = LinearLayoutManager(this)
 
         favouriteBtn.setOnClickListener { changeFavouriteMovie() }
+        expandReviewsCb.setOnCheckedChangeListener { _, checked -> expandReviews(checked) }
 
         loadDetailMovie()
     }
