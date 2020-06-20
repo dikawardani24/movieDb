@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,11 +19,39 @@ import dika.wardani.util.DateFormatterHelper
 import dika.wardani.util.Result
 import dika.wardani.util.showWarning
 import kotlinx.android.synthetic.main.activity_detail_movie.*
+import kotlinx.android.synthetic.main.activity_detail_movie.noDataContainer
+import kotlinx.android.synthetic.main.activity_favourite_movie.*
 
 
 class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPageListener {
     private lateinit var viewModel: DetailMovieViewModel
     private lateinit var adapter: ReviewItemAdapter
+
+    private fun showNoData(show: Boolean) {
+        if (show) {
+            reviewsRv.run {
+                if (visibility == View.VISIBLE) {
+                    visibility = View.GONE
+                }
+            }
+            noDataContainer.run {
+                if (visibility == View.GONE) {
+                    visibility = View.VISIBLE
+                }
+            }
+        } else {
+            reviewsRv.run {
+                if (visibility == View.GONE) {
+                    visibility = View.VISIBLE
+                }
+            }
+            noDataContainer.run {
+                if (visibility == View.VISIBLE) {
+                    visibility = View.GONE
+                }
+            }
+        }
+    }
 
     private fun setAsFavourite(isFavourite: Boolean) {
         val icon = if (isFavourite) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_border_black_24dp
@@ -77,9 +106,10 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
                 is Result.Succeed -> {
                     adapter.reviews = it.data
                     adapter.notifyDataSetChanged()
+                    showNoData(false)
                 }
                 is Result.Failed -> {
-
+                    showNoData(true)
                 }
             }
         })

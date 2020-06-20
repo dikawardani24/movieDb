@@ -111,6 +111,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <include
+                    android:id="@+id/noDataContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    layout="@layout/container_no_data" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

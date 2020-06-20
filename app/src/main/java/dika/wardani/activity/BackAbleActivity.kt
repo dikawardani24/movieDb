@@ -3,12 +3,16 @@ package dika.wardani.activity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import dika.wardani.R
 
 abstract class BackAbleActivity : AppCompatActivity() {
 
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.run {
+            setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp)
+            setDisplayHomeAsUpEnabled(true)
+        }
         dikaOnCreate(savedInstanceState)
     }
 
