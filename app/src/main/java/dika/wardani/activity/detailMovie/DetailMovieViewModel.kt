@@ -21,6 +21,7 @@ class DetailMovieViewModel(
 ): AndroidViewModel(application) {
     private var currentMovie: Movie? = null
     var isFavourite: Boolean = false
+    private var currentPage: Int = 1
 
     fun determineFavouriteMovie(): LiveData<Result<Boolean>> {
         val liveData = MutableLiveData<Result<Boolean>>()
@@ -109,12 +110,13 @@ class DetailMovieViewModel(
 
         val movie = currentMovie
         if (movie != null) {
-            reviewRepository.getMovieReviews(movie, 1)
+            reviewRepository.getMovieReviews(movie, currentPage)
                 .subscribeOn(Schedulers.io())
                 .doAfterSuccess {
                     when(it) {
                         is Result.Succeed -> {
                             val page = it.data
+                            currentPage += 1
                             liveData.postValue(Result.Succeed(page.datas))
                         }
                         is Result.Failed -> {

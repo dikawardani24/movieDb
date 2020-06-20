@@ -12,8 +12,10 @@ import com.squareup.picasso.Picasso
 import dika.wardani.R
 import dika.wardani.activity.BackAbleActivity
 import dika.wardani.adapter.ReviewItemAdapter
+import dika.wardani.adapter.ScrollListener
 import dika.wardani.domain.Movie
 import dika.wardani.domain.Review
+import dika.wardani.exception.NotMoreDataException
 import dika.wardani.repository.RepositoryFactory
 import dika.wardani.util.DateFormatterHelper
 import dika.wardani.util.Result
@@ -21,9 +23,10 @@ import dika.wardani.util.showWarning
 import kotlinx.android.synthetic.main.activity_detail_movie.*
 
 
-class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPageListener {
+class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPageListener, ScrollListener.OnLoadMoreListener {
     private lateinit var viewModel: DetailMovieViewModel
     private lateinit var adapter: ReviewItemAdapter
+    private lateinit var scrollListener: ScrollListener
 
     private fun expandReviews(expand: Boolean) {
 
@@ -107,18 +110,29 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
         movieTitle.text = movie.title
         movieReleaseDate.text = DateFormatterHelper.format(movie.releaseDate)
         movieOverview.text = movie.overview
+        voteAverageRb.rating = (movie.vote.average / 2).toFloat()
     }
 
     private fun loadReviews() {
+        scrollListener.isLoading = true
         viewModel.loadReviews().observe(this, Observer {
+            scrollListener.isLoading = false
             when(it) {
                 is Result.Succeed -> {
-                    adapter.reviews = it.data
+                    adapter.reviews.addAll(it.data)
                     adapter.notifyDataSetChanged()
                     showNoData(false)
                 }
                 is Result.Failed -> {
-                    showNoData(true)
+                    if (it.error is NotMoreDataException) {
+                        scrollListener.isLastPage = true
+                    } else {
+                        adapter.run {
+                            reviews.clear()
+                            notifyDataSetChanged()
+                        }
+                        showNoData(true)
+                    }
                 }
             }
         })
@@ -153,7 +167,13 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
         adapter = ReviewItemAdapter(this)
         adapter.onOpenReviewPageListener = this
         reviewsRv.adapter = adapter
-        reviewsRv.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        reviewsRv.layoutManager = layoutManager
+
+        scrollListener = ScrollListener(
+            layoutManager = layoutManager,
+            onLoadMoreListener = this
+        )
 
         favouriteBtn.setOnClickListener { changeFavouriteMovie() }
         expandReviewsCb.setOnCheckedChangeListener { _, checked -> expandReviews(checked) }
@@ -171,5 +191,9 @@ class DetailMovieActivity : BackAbleActivity(), ReviewItemAdapter.OnOpenReviewPa
     companion object {
         private const val TAG = "DetailMovieActivity"
         const val KEY_MOVIE = "movie"
+    }
+
+    override fun onLoadMoreItems() {
+        loadReviews()
     }
 }

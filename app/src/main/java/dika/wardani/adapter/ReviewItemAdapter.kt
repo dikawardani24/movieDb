@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_review.view.*
 class ReviewItemAdapter(
     private val context: Context
 ): RecyclerView.Adapter<ReviewItemAdapter.ViewHolder>() {
-    var reviews: List<Review> = emptyList()
+    var reviews: ArrayList<Review> = ArrayList()
     var onOpenReviewPageListener: OnOpenReviewPageListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

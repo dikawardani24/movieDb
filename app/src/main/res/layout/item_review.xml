@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:text="Author"
                     android:textStyle="bold"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     tools:ignore="HardcodedText" />
 
                 <ImageButton
