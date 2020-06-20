@@ -18,6 +18,10 @@ class FavouriteMoviesViewModel(
     private var currentProcess: Disposable? = null
     private var currentPage: Int = 1
 
+    fun resetPage() {
+        currentPage = 1
+    }
+
     fun stop() {
         val process = currentProcess
         if (process != null && !process.isDisposed) {

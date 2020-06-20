@@ -77,6 +77,14 @@ class FavouriteMovieActivity : BackAbleActivity(), MovieItemAdapter.OnSelectedMo
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.resetPage()
+        adapter.movies.clear()
+        adapter.notifyDataSetChanged()
+        loadFavouriteMovies()
+    }
+
     override fun dikaOnCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_favourite_movie)
         viewModel = FavouriteMoviesViewModel(
@@ -95,8 +103,6 @@ class FavouriteMovieActivity : BackAbleActivity(), MovieItemAdapter.OnSelectedMo
             onLoadMoreListener = this
         )
         favMoviesRv.addOnScrollListener(scrollListener)
-
-        loadFavouriteMovies()
     }
 
     override fun onBackPressed() {
