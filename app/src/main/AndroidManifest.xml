@@ -14,8 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activity.favouriteMovie.FavouriteMovieActivity"></activity>
-        <activity android:name=".activity.detailMovie.DetailMovieActivity" />
+        <activity android:name=".activity.favouriteMovie.FavouriteMovieActivity"
+            android:label="My Favourite Movies"/>
+        <activity android:name=".activity.detailMovie.DetailMovieActivity"
+            android:label="Detail Movie"/>
         <activity android:name=".activity.movieList.MovieListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
