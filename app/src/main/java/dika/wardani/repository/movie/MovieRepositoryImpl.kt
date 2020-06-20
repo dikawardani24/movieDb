@@ -6,13 +6,13 @@ import dika.wardani.api.MovieEndPoint
 import dika.wardani.api.mapper.MovieMapper
 import dika.wardani.domain.Movie
 import dika.wardani.domain.Page
+import dika.wardani.exception.NotFoundException
 import dika.wardani.exception.NotMoreDataException
 import dika.wardani.exception.SystemException
 import dika.wardani.local.dao.FavouriteMovieDao
 import dika.wardani.repository.BaseRepository
 import dika.wardani.util.Result
 import io.reactivex.Single
-import java.lang.Exception
 
 class MovieRepositoryImpl(
     private val movieEndPoint: MovieEndPoint,
@@ -96,6 +96,36 @@ class MovieRepositoryImpl(
                 it.onSuccess(Result.Succeed(Unit))
             } catch (e: Exception) {
                 it.onSuccess(Result.Failed(SystemException("Unable to save favourite movie", e)))
+            }
+        }
+    }
+
+    override fun loadFavouriteMovie(pageNumber: Int): Single<Result<Page<Movie>>> {
+        return Single.create {
+            try {
+                val offset = (pageNumber -1) * limitLoadLocalData
+
+                Log.d(TAG, "limit: $limitLoadLocalData, requestPage: $pageNumber, offset: $offset")
+                val entities = favouriteMovieDao.findAll(
+                    limit = limitLoadLocalData,
+                    offset = offset
+                )
+
+                if (entities.isNotEmpty()) {
+                    val pageMovies = dika.wardani.local.mapper.MovieMapper.toPageMovie(pageNumber, entities)
+                    it.onSuccess(Result.Succeed(pageMovies))
+                } else {
+                    val error = if (pageNumber > 1) {
+                        NotMoreDataException("No more data favourite movies")
+                    } else {
+                        NotFoundException("No data favourite movies")
+                    }
+
+                    it.onSuccess(Result.Failed(error))
+                }
+
+            } catch (e: Exception) {
+                it.onSuccess(Result.Failed(SystemException("Unable to load favourite movies", e)))
             }
         }
     }

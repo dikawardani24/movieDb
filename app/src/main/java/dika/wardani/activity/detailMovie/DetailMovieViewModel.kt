@@ -28,14 +28,10 @@ class DetailMovieViewModel(
             movieRepository.saveFavourite(movieToSave)
                 .subscribeOn(Schedulers.io())
                 .doAfterSuccess {
-                    Log.d(TAG, it.toString())
                     when(it) {
                         is Result.Succeed -> liveData.postValue(Result.Succeed(Unit))
                         is Result.Failed -> liveData.postValue(Result.Failed(it.error))
                     }
-                }
-                .doOnError {
-                    Log.d(TAG, "${it.message}")
                 }
                 .subscribe()
         } else {

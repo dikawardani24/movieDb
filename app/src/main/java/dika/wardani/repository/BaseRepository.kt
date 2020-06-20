@@ -10,6 +10,8 @@ import java.net.SocketTimeoutException
 
 abstract class BaseRepository {
 
+    protected val limitLoadLocalData = 3
+
     private fun handle404Error(httpException: HttpException): SystemException {
         val responseBody = httpException.response()?.errorBody()?.string()
 

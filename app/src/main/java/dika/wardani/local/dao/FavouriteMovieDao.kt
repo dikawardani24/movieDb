@@ -16,4 +16,10 @@ interface FavouriteMovieDao {
 
     @Query("SELECT *FROM fav_movie")
     fun findAll(): List<FavouriteMovieEntity>
+
+    @Query("SELECT *FROM fav_movie ORDER BY title ASC LIMIT :limit OFFSET :offset")
+    fun findAll(offset: Int, limit: Int): List<FavouriteMovieEntity>
+
+    @Query("SELECT COUNT(*) FROM fav_movie")
+    fun count(): Int
 }

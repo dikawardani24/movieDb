@@ -2,6 +2,7 @@ package dika.wardani.activity.movieList
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dika.wardani.R
 import dika.wardani.activity.detailMovie.DetailMovieActivity
+import dika.wardani.activity.favouriteMovie.FavouriteMovieActivity
 import dika.wardani.adapter.MovieItemAdapter
 import dika.wardani.adapter.ScrollListener
 import dika.wardani.domain.Movie
@@ -77,6 +79,16 @@ class MovieListActivity : AppCompatActivity(), MovieItemAdapter.OnSelectedMovieL
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_activity_movie_list, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.favMenu -> {
+                startActivity(FavouriteMovieActivity::class)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

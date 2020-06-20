@@ -1,6 +1,5 @@
 package dika.wardani.local.mapper
 
-import dika.wardani.api.mapper.MovieMapper
 import dika.wardani.domain.*
 import dika.wardani.local.entity.FavouriteMovieEntity
 import dika.wardani.util.DateFormatterHelper
@@ -21,8 +20,8 @@ object MovieMapper {
     private fun toMovie(movieItem: FavouriteMovieEntity): Movie {
         val image = if (movieItem.backDropPath == null && movieItem.posterPath == null)
             null else MovieImage(
-            backDropPath = "${MovieMapper.imageBaseUrl}${movieItem.backDropPath}",
-            posterPath = "${MovieMapper.imageBaseUrl}${movieItem.posterPath}"
+            backDropPath = movieItem.backDropPath,
+            posterPath = movieItem.posterPath
         )
 
         return Movie(
