@@ -21,6 +21,7 @@ class SplashScreenActivity : AppCompatActivity() {
                     updateProgress()
                 } else {
                     startActivity(MovieListActivity::class)
+                    finish()
                 }
             },
             300
